@@ -1,7 +1,7 @@
 const { Sequelize } = require("sequelize");
 
 const sequelize = new Sequelize(
-  "bus booking usnig sequlize",
+  "bus_booking_db",
   "root",
   "Root@123",
   {
@@ -10,4 +10,7 @@ const sequelize = new Sequelize(
   }
 );
 
-module.exports = sequelize;
+sequelize
+  .authenticate()
+  .then(() => console.log("Database connected"))
+  .catch(err => console.error("Connection error:", err));

@@ -1,27 +1,30 @@
-const express = require("express");
-const sequelize = require("./config/database");
+const sequelize = require("../config/database");
 
-require("./models/User");
-require("./models/Bus");
-require("./models/Booking");
-require("./models/Payment");
+const User = require("./User");
+const Bus = require("./Bus");
+const Booking = require("./Booking");
 
-const userRoutes = require("./routes/userRoutes");
-const busRoutes = require("./routes/busRoutes");
+// User -> Booking
+User.hasMany(Booking, {
+  foreignKey: "userId",
+});
 
-const app = express();
+Booking.belongsTo(User, {
+  foreignKey: "userId",
+});
 
-app.use(express.json());
+// Bus -> Booking
+Bus.hasMany(Booking, {
+  foreignKey: "busId",
+});
 
-app.use("/users", userRoutes);
-app.use("/buses", busRoutes);
+Booking.belongsTo(Bus, {
+  foreignKey: "busId",
+});
 
-sequelize
-  .sync()
-  .then(() => {
-    console.log("Database Connected");
-    app.listen(3000, () => {
-      console.log("Server running on port 3000");
-    });
-  })
-  .catch((err) => console.log(err));
+module.exports = {
+  sequelize,
+  User,
+  Bus,
+  Booking,
+};
